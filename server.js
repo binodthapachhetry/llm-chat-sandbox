@@ -57,6 +57,14 @@ app.listen(PORT, () => {
 async function handleOllama(messages, stream, res) {
   // Ollama chat API: POST /api/chat  { model, messages, stream }
   const model = process.env.OLLAMA_MODEL || 'llama3.1';
+
+    console.log('[LLM][OLLAMA][REQUEST]', JSON.stringify({ 
+    url: 'http://localhost:11434/api/chat',
+    model, 
+    stream: !!stream, 
+    messages 
+    }, null, 2));
+
   const resp = await fetch('http://localhost:11434/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -65,6 +73,7 @@ async function handleOllama(messages, stream, res) {
 
   if (!stream) {
     const json = await resp.json();
+
     const text = (json && json.message && json.message.content) || '';
     const data = { content: text, provider: 'ollama' };
     answerCache.set(JSON.stringify(messages), data);
@@ -92,7 +101,6 @@ async function handleOllama(messages, stream, res) {
       }
     }
   }
-  res.write(`event: done\ndata: ${JSON.stringify({ content: full })}\n\n`);
   res.end();
   answerCache.set(JSON.stringify(messages), { content: full, provider: 'ollama' });
 }
@@ -140,11 +148,18 @@ async function handleOpenAICompat(messages, stream, res) {
     const chunk = decoder.decode(value);
     for (const line of chunk.split('\n')) {
       if (!line.startsWith('data:')) continue;
+
       const payload = line.slice(5).trim();
+    //   const payload = line.slice(5).replace(/^ /, '');
+
       if (payload === '[DONE]') {
-        res.write(`event: done\ndata: ${JSON.stringify({ content: full })}\n\n`);
+
+        // res.write(`event: done\ndata: ${JSON.stringify({ content: full })}\n\n`);
+
+        res.write(`data: [DONE]\n\n`);
+
         res.end();
-        answerCache.set(JSON.stringify(messages), { content: full, provider: 'openai_compat' });
+        answerCache.set(JSON.stringify(messages), { content: full, provider: 'ollama' });
         return;
       }
       try {

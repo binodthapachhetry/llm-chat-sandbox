@@ -72,14 +72,26 @@
         const chunk = decoder.decode(value);
         // parse SSE "data: ..." lines
         for (const line of chunk.split('\n')) {
-          if (!line.startsWith('data:') && !line.startsWith('event:')) continue;
-          if (line.startsWith('event: done')) continue;
-          if (line.startsWith('data:')) {
-            const token = line.slice(5).trim();
-            acc += token;
+        //   if (!line.startsWith('data:') && !line.startsWith('event:')) continue;
+        //   if (line.startsWith('event: done')) continue;
+        //   if (line.startsWith('data:')) {
+        //     const token = line.slice(5).trim();
+        //     acc += token;
+        //     cur.textContent = acc;
+        //     log.scrollTop = log.scrollHeight;
+        //   }
+            if (!line.startsWith('data:')) continue;
+
+            const payload = line.slice(5); // keep whitespace
+            if (payload.trim() === '[DONE]') {
+                // stop streaming; do NOT append this marker to the UI
+                break;
+            }
+
+            // Otherwise, it's a token chunk; append as-is
+            acc += payload;
             cur.textContent = acc;
-            log.scrollTop = log.scrollHeight;
-          }
+
         }
       }
 
