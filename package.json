@@ -2,10 +2,25 @@
   "name": "llm-chat-sandbox",
   "version": "1.0.0",
   "type": "module",
-  "scripts": { "start": "node server.js" },
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "node-fetch": "^3.3.2"
-  }
+  },
+  "description": "Minimal Node.js chat app for experimenting with open-weight LLM inference (Ollama, vLLM, TGI) and evaluating scaling, caching, and streaming strategies for future GovCloud deployment.",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/binodthapachhetry/llm-chat-sandbox.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/binodthapachhetry/llm-chat-sandbox/issues"
+  },
+  "homepage": "https://github.com/binodthapachhetry/llm-chat-sandbox#readme"
 }
