@@ -209,3 +209,5 @@ __marimo__/
 
 # npm packages
 node_modules/
+
+key_first.pem
