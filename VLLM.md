@@ -114,7 +114,7 @@ RestartSec=5
 ExecStartPre=-/usr/bin/docker rm -f vllm
 
 # Main vLLM container
-ExecStart=/usr/bin/docker run   --gpus all   --ipc=host   -p 8000:8000   --name vllm   -e VLLM_WORKER_CONCURRENCY=1   -e HUGGING_FACE_HUB_TOKEN=<YOUR_HF_TOKEN>   -v /models:/models   -v /models/torch_compile_cache:/root/.cache/vllm/torch_compile_cache   -e HF_HOME=/models/hf   -e TORCH_CUDA_ARCH_LIST=8.9   vllm/vllm-openai:latest     --model RedHatAI/gemma-3-27b-it-FP8-dynamic     --download-dir /models/hf     --max-model-len 4096     --tensor-parallel-size 1     --enable-prefix-caching     --enforce-eager
+ExecStart=/usr/bin/docker run   --gpus all   --ipc=host   -p 8000:8000   --name vllm   -e VLLM_WORKER_CONCURRENCY=1   -e HUGGING_FACE_HUB_TOKEN=<YOUR_HF_TOKEN>   -v /models:/models   -v /models/torch_compile_cache:/root/.cache/vllm/torch_compile_cache   -e HF_HOME=/models/hf   -e TORCH_CUDA_ARCH_LIST=8.9   vllm/vllm-openai:latest     --model unsloth/gemma-3-4b-it-unsloth-bnb-4bit     --download-dir /models/hf     --max-model-len 4096     --tensor-parallel-size 1     --enable-prefix-caching     --enforce-eager
 
 ExecStop=/usr/bin/docker stop vllm
 
